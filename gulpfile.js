@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var base64 = require('gulp-base64');	//插件，将图片换为base64的
 var autoprefixer = require('gulp-autoprefixer'); // 作用：样式文件的兼容
+var px2rem = require('gulp-px2rem-plugin');//px转rem
 
 //编译sass
 gulp.task('sass', function() {
@@ -30,7 +31,14 @@ gulp.task('prefixer', ['sass'], function() {
         .pipe(gulp.dest('./sass/'));
 });
 
+gulp.task('px2rem',function(){
+    gulp.src('./sass/style.css')
+        .pipe(px2rem({'width_design':750,'valid_num':6,'pieces':10,'ignore_px':[1,2],'ignore_selector':['.class1']}))
+        .pipe(gulp.dest('./dist/'));
+})
+
+
 //定义一个工作，监听
 gulp.task("watch",function(){
-     gulp.watch( 'sass/**/*', ['prefixer', 'sass']);
+     gulp.watch( 'sass/**/*', ['prefixer', 'sass','px2rem']);
 });
